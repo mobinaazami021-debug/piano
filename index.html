@@ -3,104 +3,139 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>پیانوی وب — قابل آپلود در GitHub Pages</title>
+<title>پیانوی وب — مخصوص اناهیتا</title>
 <style>
   :root{
     --white-key-width: 56px;
-    --white-key-height: 260px;
-    --black-key-width: 34px;
-    --black-key-height: 160px;
+    --white-key-height: 300px;
+    --black-key-width: 36px;
+    --black-key-height: 180px;
     --gap: 2px;
-    --accent: #1e88e5;
+    --accent: #ff6b81;
+    --bg1: #071022;
+    --bg2: #0f1724;
   }
+  html,body{ height:100%; }
   body{
     font-family: "Vazirmatn", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-    margin: 16px;
-    background: linear-gradient(180deg,#0f1724 0%, #071022 100%);
-    color: #e6eef8;
+    margin: 12px;
+    background: linear-gradient(180deg,var(--bg2) 0%, var(--bg1) 100%);
+    color: #eef6ff;
     display:flex;
     flex-direction:column;
     gap:12px;
     align-items: center;
     min-height:100vh;
   }
-  header{ text-align:center; }
-  header h1{ margin:0; font-size:20px; }
-  header p{ margin:4px 0 0 0; opacity:0.8; font-size:13px; }
+  .notice{
+    width:100%;
+    max-width:1100px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    padding:14px;
+    border-radius:12px;
+    box-shadow: 0 6px 30px rgba(0,0,0,0.6);
+    text-align:center;
+  }
+  .rotate{
+    font-weight:700;
+    font-size:16px;
+    margin-bottom:6px;
+  }
+  .personal{
+    font-size:15px;
+    margin:6px 0;
+  }
+  .note-line{
+    font-size:14px;
+    opacity:0.95;
+    display:flex;
+    gap:8px;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  .heart{
+    width:34px;
+    height:34px;
+    display:inline-block;
+    vertical-align:middle;
+  }
 
   .controls{
     display:flex;
     gap:12px;
     align-items:center;
     flex-wrap:wrap;
+    width:100%;
+    max-width:1100px;
+    justify-content:center;
   }
   .controls label{ font-size:14px; display:flex; align-items:center; gap:8px; }
 
   .keyboard-wrap{
     overflow-x:auto;
-    padding: 8px;
+    padding: 10px;
     width:100%;
     max-width:1100px;
-    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
     border-radius:12px;
     box-shadow: 0 6px 30px rgba(0,0,0,0.6);
   }
 
   .keyboard{
     position:relative;
-    display:flex;
     height:var(--white-key-height);
     user-select:none;
     touch-action: manipulation;
   }
 
   .key{
-    position:relative;
+    position:absolute;
     box-sizing:border-box;
-    border:1px solid rgba(0,0,0,0.15);
+    border:1px solid rgba(0,0,0,0.2);
     display:flex;
     align-items:flex-end;
     justify-content:center;
     padding-bottom:8px;
     font-size:12px;
     cursor: pointer;
+    transition: transform 0.05s ease, background 0.08s ease;
   }
 
   .white{
     width:var(--white-key-width);
     height:var(--white-key-height);
-    background: linear-gradient(#fff,#f1f1f1);
+    background: linear-gradient(#fff,#f7f7f7);
     border-radius:6px;
-    margin-right:var(--gap);
     z-index:1;
     color:#222;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
   }
-  .white.pressed{ background: linear-gradient(var(--accent), #a3d2ff); color: white; transform: translateY(2px); box-shadow: inset 0 -6px 20px rgba(0,0,0,0.08); }
+  .white.pressed{ background: linear-gradient(var(--accent), #ffd6e0); color: white; transform: translateY(3px); box-shadow: inset 0 -6px 20px rgba(0,0,0,0.08); }
 
   .black{
     width:var(--black-key-width);
     height:var(--black-key-height);
-    background: linear-gradient(#222,#000);
+    background: linear-gradient(#111,#000);
     color:#fff;
-    position:absolute;
-    margin-right:0;
     border-radius:4px;
     z-index:2;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.7);
   }
-  .black.pressed{ background: linear-gradient(#1e88e5,#0b5db0); transform: translateY(3px); }
+  .black.pressed{ background: linear-gradient(var(--accent), #b11f3f); transform: translateY(4px); }
 
   .note-label{
     font-size:11px;
-    opacity:0.8;
+    opacity:0.9;
     padding:2px 6px;
     border-radius:4px;
     background: rgba(255,255,255,0.0);
+    pointer-events:none;
   }
 
   .info{
     font-size:13px;
-    opacity:0.9;
+    opacity:0.95;
   }
 
   .small{
@@ -115,176 +150,199 @@
   }
 
   /* responsive */
-  @media (max-width:600px){
-    :root{ --white-key-width:44px; --white-key-height:200px; --black-key-width:26px; --black-key-height:120px; }
-    header h1{ font-size:18px; }
+  @media (max-width:900px){
+    :root{ --white-key-width:44px; --white-key-height:220px; --black-key-width:28px; --black-key-height:140px; }
   }
-
+  @media (max-width:600px){
+    .rotate{ font-size:15px; }
+    .personal{ font-size:14px; }
+  }
 </style>
 </head>
 <body>
-  <header>
-    <h1>پیانوی وب — قابل استفاده با ماوس، لمس و کیبورد</h1>
-    <p>صفحه را در گیت‌هاب بارگزاری کن تا مستقیماً از اینترنت قابل اجرا باشد.</p>
-  </header>
+  <div class="notice" role="region" aria-label="راهنما">
+    <div class="rotate">صفحهٔ گوشیو بچرخون تا همهٔ کلاویه‌ها برات بیان — <strong>حتماً گوشی رو افقی کن</strong>.</div>
+    <div class="personal">مخصوص <strong>اناهیتاااا جون</strong> — دوست هنرمند من 🎨</div>
+    <div class="note-line">
+      <div>یادته گفتی پیانو رو نمیشه جایی برد؟ ولی گوشیو که میتونی. این سایت مخصوص تو طراحی شد که بتونی پیانو‌تو هر جا خواستی ببری.</div>
+      <!-- SVG heart sticker -->
+      <svg class="heart" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stop-color="#ff6b81"/>
+            <stop offset="1" stop-color="#ffb199"/>
+          </linearGradient>
+        </defs>
+        <path fill="url(#g1)" d="M12 21s-7.2-4.6-9.2-7.2C-1.1 8.9 4 3 8.6 6.1 10.4 7.5 12 10 12 10s1.6-2.5 3.4-3.9C20 3 25.1 8.9 21.2 13.8 19.2 16.4 12 21 12 21z"/>
+      </svg>
+    </div>
+  </div>
 
-  <div class="controls">
-    <label>ولوم: <input id="volume" type="range" min="0" max="100" value="60" /></label>
-    <label>اکتاو: 
+  <div class="controls" role="group" aria-label="کنترل‌ها">
+    <label>حجم: <input id="volume" type="range" min="0" max="100" value="60" /></label>
+    <label>اکتاو (شیفت): 
       <select id="octaveSelect">
+        <option value="-2">-2</option>
         <option value="-1">-1</option>
-        <option value="0" selected>0 (پیش‌فرض)</option>
+        <option value="0" selected>0</option>
         <option value="1">+1</option>
         <option value="2">+2</option>
       </select>
     </label>
     <label><input id="sustain" type="checkbox" /> Sustain (نگه داشتن)</label>
-    <div style="margin-left:8px;" class="small info">برای نواختن با کیبورد: از ردیف z/s/x/d/... استفاده کن (مانند اکثر پیانوهای وب)</div>
+    <div class="small info">برای نواختن با کیبورد: از ردیف z/s/x/d/... و ردیف بالاتر Q/2/W/... استفاده کن. (قابل استفاده روی دسکتاپ و موبایل)</div>
   </div>
 
-  <div class="keyboard-wrap" id="wrap">
-    <div class="keyboard" id="keyboard" aria-hidden="false"></div>
+  <div class="keyboard-wrap" id="wrap" aria-hidden="false">
+    <div class="keyboard" id="keyboard" tabindex="0"></div>
   </div>
 
-  <footer>
-    <div class="small">راهنما: کلیک یا لمس برای نواختن — نگه داشتن Sustain یا استفاده از صفحه‌کلید. برای استفاده در GitHub Pages، این فایل را با نام <code>index.html</code> در ریشهٔ repo قرار بده.</div>
-  </footer>
+  <footer class="small">راهنما: کلیک یا لمس برای نواختن — نگه داشتن Sustain یا استفاده از صفحه‌کلید. فایل را به نام <code>index.html</code> ذخیره کن و در ریشهٔ repo آپلود کن (یا از gh-pages استفاده کن).</footer>
 
 <script>
-/*
-  پیانوی وب با Web Audio
-  - نُت‌ها به صورت فرکانس تنظیم می‌شوند (A4 = 440Hz).
-  - از Oscillator با ADSR ساده استفاده می‌شود.
-  - نگه‌داشتن (sustain) با checkbox کنترل می‌شود.
+/* پیانوی کامل 88 کلاویه (MIDI 21..108) با Web Audio
+   تلاش شده همهٔ کلیدها دقیق ساخته و مرتب شوند.
 */
 
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 const ctx = new AudioCtx();
 
+// Master chain
 const masterGain = ctx.createGain();
 masterGain.gain.value = 0.6;
 masterGain.connect(ctx.destination);
 
-const keysDefinition = [
-  // name, semitone offset from C4 (C4 = 60 MIDI)
-  ['C', 0], ['C#', 1], ['D', 2], ['D#', 3], ['E', 4], ['F', 5], ['F#', 6],
-  ['G', 7], ['G#', 8], ['A', 9], ['A#', 10], ['B', 11]
-];
+// Reverb placeholder (simple convolver could be added) - omitted to keep file self-contained and lightweight
 
-function midiToFreq(midi){
-  return 440 * Math.pow(2, (midi - 69) / 12);
+// Key definitions (semitone names)
+const keysDefinition = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+
+function midiToFreq(m){
+  // Standard formula
+  return 440 * Math.pow(2, (m - 69) / 12);
 }
 
-// build keyboard: we'll create 3 octaves visible (C3 .. B5)
-// base MIDI for C4 is 60; let's start at C3 (48)
-const startMidi = 48; // C3
-const totalKeys = 36; // 3 octaves
+// Full piano range
+const startMidi = 21; // A0
+const endMidi = 108;  // C8
+const totalKeys = endMidi - startMidi + 1; // 88
+
 const keyboardEl = document.getElementById('keyboard');
-
 const keyElements = [];
-const activeNotes = new Map(); // midi -> {osc, gainNode, released}
+const activeNotes = new Map(); // midi -> {osc,gain,released,stopTimer}
 
-function makeKey(midi){
-  const noteName = keysDefinition[(midi - 60 + 12*10) % 12][0]; // relative name
-  const isSharp = noteName.includes('#');
+// Build keys: we will create absolute-positioned keys and compute positions precisely
+// First compute white key sequence and positions
+const whiteMidiList = [];
+for(let m = startMidi; m <= endMidi; m++){
+  const name = keysDefinition[(m % 12 + 12) % 12];
+  if(!name.includes('#')) whiteMidiList.push(m);
+}
+const whiteCount = whiteMidiList.length;
+
+// Create elements for all keys and store meta
+for(let m = startMidi; m <= endMidi; m++){
+  const name = keysDefinition[(m % 12 + 12) % 12];
+  const octave = Math.floor(m/12) - 1;
+  const label = name + octave;
+  const isSharp = name.includes('#');
   const el = document.createElement('div');
   el.className = 'key ' + (isSharp ? 'black' : 'white');
-  el.dataset.midi = midi;
-  el.dataset.note = noteName + (Math.floor(midi/12)-1);
-  el.innerHTML = '<span class="note-label">' + el.dataset.note + '</span>';
-  return el;
+  el.dataset.midi = m;
+  el.dataset.note = label;
+  el.setAttribute('role','button');
+  el.setAttribute('aria-label', label);
+  el.innerHTML = '<span class="note-label">' + label + '</span>';
+  keyboardEl.appendChild(el);
+  keyElements.push({midi:m, el, isSharp});
 }
 
-// position white keys inline and absolutely place black keys
-let whiteIndex = 0;
-for(let i=0;i<totalKeys;i++){
-  const midi = startMidi + i;
-  const name = keysDefinition[(midi - 60 + 1200) % 12][0];
-  const isSharp = name.includes('#');
-  const keyEl = makeKey(midi);
-  if(!isSharp){
-    keyEl.style.position = 'relative';
-    keyEl.style.zIndex = 1;
-    keyboardEl.appendChild(keyEl);
-    whiteIndex++;
-  } else {
-    // add black keys later as absolutely positioned elements
-    keyboardEl.appendChild(keyEl);
-  }
-  keyElements.push(keyEl);
-}
-
-// Now we need to position black keys over whites
+// Layout function: position whites in sequence, then place blacks between them
 function layoutKeys(){
-  // get white key positions in DOM order
-  const whites = Array.from(keyElements).filter(k=>!k.classList.contains('black'));
-  // reset
-  whites.forEach(w=>w.style.marginRight = getComputedStyle(document.documentElement).getPropertyValue('--gap') || '2px');
-  // assign left positions to black keys based on neighboring white keys
-  const blacks = Array.from(keyElements).filter(k=>k.classList.contains('black'));
-  // find index mapping
-  const whiteStarts = [];
-  let leftPos = 0;
+  const wrapStyle = getComputedStyle(document.documentElement);
+  const whiteW = parseFloat(wrapStyle.getPropertyValue('--white-key-width')) || 56;
+  const blackW = parseFloat(wrapStyle.getPropertyValue('--black-key-width')) || 36;
+  const gap = parseFloat(wrapStyle.getPropertyValue('--gap')) || 2;
+
+  // Build array of white midi in order
+  const whites = keyElements.filter(k=>!k.isSharp).sort((a,b)=>a.midi-b.midi);
+  const blacks = keyElements.filter(k=>k.isSharp).sort((a,b)=>a.midi-b.midi);
+
+  // Position whites left-to-right
   whites.forEach((w, idx)=>{
-    w.style.left = '0';
-    w.style.marginRight = getComputedStyle(document.documentElement).getPropertyValue('--gap') || '2px';
-    // width from CSS variable
-    const width = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--white-key-width')) || 56;
-    // accumulate left positions by measuring offsetLeft (but element may not be fully laid out if no display)
-    // safer: compute using widths and index
-    const gap = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gap')) || 2;
-    whiteStarts.push(idx * (width + gap));
+    const left = idx * (whiteW + gap);
+    w.el.style.left = left + 'px';
+    w.el.style.width = whiteW + 'px';
+    w.el.style.height = getComputedStyle(document.documentElement).getPropertyValue('--white-key-height') || '300px';
+    w.el.style.position = 'absolute';
   });
 
-  // Place blacks: for each black key, find nearest previous white key and offset
-  // Simple mapping: black sits between white[i] and white[i+1]; we iterate sequence
-  for(const b of blacks){
-    const midi = parseInt(b.dataset.midi,10);
-    // which white is to the left? compute virtual position by counting previous non-sharp keys
+  // For blacks: find the white key to the left and position slightly overlapping
+  // mapping: black key sits between previous and next white keys. We'll compute by scanning MIDI.
+  blacks.forEach(b=>{
+    // find index of the white key that is immediately left of this black key
+    // count number of white keys with midi < b.midi
     let leftCount = 0;
-    for(let n = startMidi; n < midi; n++){
-      const nm = keysDefinition[(n - 60 + 1200) % 12][0];
-      if(!nm.includes('#')) leftCount++;
+    for(const w of whites){
+      if(w.midi < b.midi) leftCount++;
     }
-    // position relative to wrap
-    const whiteWidth = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--white-key-width')) || 56;
-    const gap = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gap')) || 2;
-    // black sits slightly to the right of leftCount-1 white start
-    const left = (leftCount - 1) * (whiteWidth + gap) + whiteWidth*0.65;
-    b.style.left = left + 'px';
-  }
+    // we want to place black roughly at leftCount-1 + offset
+    const left = (leftCount - 1) * (whiteW + gap) + whiteW * 0.65;
+    b.el.style.left = left + 'px';
+    b.el.style.width = blackW + 'px';
+    b.el.style.height = getComputedStyle(document.documentElement).getPropertyValue('--black-key-height') || '180px';
+    b.el.style.position = 'absolute';
+  });
 
-  // set keyboard width to fit whites
-  const totalWidth = whites.length * (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--white-key-width')) || 56)
-                    + (whites.length-1) * (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--gap')) || 2);
-  keyboardEl.style.width = (totalWidth + 10) + 'px';
+  // set keyboard total width
+  const totalWidth = whites.length * (whiteW + gap);
+  keyboardEl.style.width = (totalWidth + 12) + 'px';
 }
-setTimeout(layoutKeys, 50);
-window.addEventListener('resize', ()=> setTimeout(layoutKeys, 50));
+setTimeout(layoutKeys, 60);
+window.addEventListener('resize', ()=> setTimeout(layoutKeys, 60));
 
-// sound engine: play midi
-function playMidi(midi, {velocity=0.8, sustain=false}={}){
-  if(activeNotes.has(midi) && !activeNotes.get(midi).released) return; // already held
+// Sound engine
+function createVoice(midi, velocity=1){
   const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
+  // use a blended sound for richer timbre: fundamental + gentle overtone via GainNode + oscillator pair
+  const osc2 = ctx.createOscillator();
+  const g1 = ctx.createGain();
+  const g2 = ctx.createGain();
+  const master = ctx.createGain();
+
   const freq = midiToFreq(midi);
-  osc.type = 'sine'; // could add choices
+  osc.type = 'sine';
   osc.frequency.value = freq;
+  osc2.type = 'sine';
+  osc2.frequency.value = freq * 2; // simple harmonic
+  g1.gain.value = 1.0;
+  g2.gain.value = 0.18; // overtone level
+  master.gain.value = velocity * (document.getElementById('volume').value/100);
 
-  // simple ADSR
+  osc.connect(g1); g1.connect(master);
+  osc2.connect(g2); g2.connect(master);
+  master.connect(masterGain);
+
   const now = ctx.currentTime;
-  const a = 0.01, d = 0.08, s = sustain? 0.9 : 0.4, r = 0.4;
-  gain.gain.cancelScheduledValues(now);
-  gain.gain.setValueAtTime(0.0001, now);
-  gain.gain.linearRampToValueAtTime(velocity * 1.0 * (document.getElementById('volume').value/100), now + a);
-  gain.gain.linearRampToValueAtTime(s * velocity * (document.getElementById('volume').value/100), now + a + d);
-
-  osc.connect(gain);
-  gain.connect(masterGain);
+  const attack = 0.01;
+  const decay = 0.08;
+  const sustainLevel = 0.6;
+  master.gain.setValueAtTime(0.0001, now);
+  master.gain.linearRampToValueAtTime(1.0 * velocity * (document.getElementById('volume').value/100), now + attack);
+  master.gain.linearRampToValueAtTime(sustainLevel * velocity * (document.getElementById('volume').value/100), now + attack + decay);
 
   osc.start();
+  osc2.start();
 
-  activeNotes.set(midi, {osc, gain, released: false, releaseTime: null, r});
+  return {osc, osc2, g1, g2, master};
+}
+
+function playMidi(midi, {velocity=1, sustain=false}={}){
+  // if already playing and not released, ignore (or retrigger)
+  const existing = activeNotes.get(midi);
+  if(existing && !existing.released) return;
+  const voice = createVoice(midi, velocity);
+  activeNotes.set(midi, {voice, released:false});
   highlightKey(midi, true);
 }
 
@@ -293,158 +351,128 @@ function releaseMidi(midi){
   if(!entry || entry.released) return;
   const now = ctx.currentTime;
   entry.released = true;
-  entry.releaseTime = now;
-  const r = entry.r || 0.4;
-  entry.gain.gain.cancelScheduledValues(now);
-  entry.gain.gain.setValueAtTime(entry.gain.gain.value, now);
-  entry.gain.gain.linearRampToValueAtTime(0.0001, now + r);
-  setTimeout(()=> {
-    try{ entry.osc.stop(); } catch(e){}
-    try{ entry.osc.disconnect(); entry.gain.disconnect(); } catch(e){}
+  const releaseTime = 0.45;
+  try{
+    const master = entry.voice.master;
+    master.gain.cancelScheduledValues(now);
+    master.gain.setValueAtTime(master.gain.value, now);
+    master.gain.linearRampToValueAtTime(0.0001, now + releaseTime);
+    // stop oscillators after release fade
+    setTimeout(()=>{
+      try{ entry.voice.osc.stop(); entry.voice.osc.disconnect(); } catch(e){}
+      try{ entry.voice.osc2.stop(); entry.voice.osc2.disconnect(); } catch(e){}
+      try{ entry.voice.g1.disconnect(); entry.voice.g2.disconnect(); entry.voice.master.disconnect(); } catch(e){}
+      activeNotes.delete(midi);
+      highlightKey(midi, false);
+    }, (releaseTime + 0.05) * 1000);
+  }catch(e){
     activeNotes.delete(midi);
     highlightKey(midi, false);
-  }, (r+0.05)*1000);
+  }
 }
 
 function highlightKey(midi, on){
-  const key = [...keyElements].find(k=>parseInt(k.dataset.midi,10)===midi);
-  if(!key) return;
-  if(on) key.classList.add('pressed'); else key.classList.remove('pressed');
+  const item = keyElements.find(k=>k.midi===midi);
+  if(!item) return;
+  if(on) item.el.classList.add('pressed'); else item.el.classList.remove('pressed');
 }
 
-// mouse / touch interaction
-let mouseDown = false;
+// Pointer / touch handling
 keyboardEl.addEventListener('pointerdown', e=>{
-  if(e.target.closest('.key')){
-    e.preventDefault();
-    ctx.resume();
-    mouseDown = true;
-    const k = e.target.closest('.key');
-    const midi = parseInt(k.dataset.midi,10);
-    const sustain = document.getElementById('sustain').checked;
-    playMidi(midi, {velocity:1, sustain});
-  }
+  const k = e.target.closest('.key');
+  if(!k) return;
+  e.preventDefault();
+  ctx.resume();
+  const midi = parseInt(k.dataset.midi,10);
+  const sustain = document.getElementById('sustain').checked;
+  playMidi(midi, {velocity:1, sustain});
+  // mark pointer capture to receive pointerup
+  k.setPointerCapture && k.setPointerCapture(e.pointerId);
 });
-window.addEventListener('pointerup', e=>{
-  if(mouseDown){
-    mouseDown = false;
-    // if not sustain, release all notes pressed by mouse
-    if(!document.getElementById('sustain').checked){
-      // release all currently pressed keys that are near pointer (or simply release all active notes started recently)
-      // We'll not be over-specific: release all active notes whose release flag is false
-      for(const [m,entry] of activeNotes.entries()){
-        if(!entry.released) releaseMidi(m);
-      }
-    }
-  }
+keyboardEl.addEventListener('pointerup', e=>{
+  const k = e.target.closest('.key');
+  if(!k) return;
+  const midi = parseInt(k.dataset.midi,10);
+  if(!document.getElementById('sustain').checked) releaseMidi(midi);
+});
+keyboardEl.addEventListener('pointerleave', e=>{
+  // on dragging out, release if no sustain
+  const k = e.target.closest('.key');
+  if(!k) return;
+  const midi = parseInt(k.dataset.midi,10);
+  if(!document.getElementById('sustain').checked) releaseMidi(midi);
 });
 
-// single key click (for mobile quick tap)
+// click (tap) short note
 keyboardEl.addEventListener('click', e=>{
   const k = e.target.closest('.key');
   if(!k) return;
   const midi = parseInt(k.dataset.midi,10);
-  // if sustain on, toggle hold; else play a short note
   const sustain = document.getElementById('sustain').checked;
   playMidi(midi, {velocity:1, sustain});
-  if(!sustain){
-    setTimeout(()=> releaseMidi(midi), 220);
-  }
+  if(!sustain) setTimeout(()=> releaseMidi(midi), 240);
 });
 
-// keyboard mapping (computer keys)
+// Keyboard mapping (common web-piano mapping). We'll include two rows for comfortable play.
+// Mapping base positions to specific MIDI values. For wide range we map starting keys to middle C region and allow octaveShift.
 const keyMap = {
-  // row like: z s x d c v g b h n j m , l . /
-  'KeyZ': 48, // C3
-  'KeyS': 49,
-  'KeyX': 50,
-  'KeyD': 51,
-  'KeyC': 52,
-  'KeyV': 53,
-  'KeyG': 54,
-  'KeyB': 55,
-  'KeyH': 56,
-  'KeyN': 57,
-  'KeyJ': 58,
-  'KeyM': 59,
-  'Comma': 60, // C4
-  'KeyL': 61,
-  'Period': 62,
-  'Semicolon': 63,
-  'Slash': 64,
-  // add more for higher octaves
-  'KeyQ': 60,
-  'Digit2': 61,
-  'KeyW': 62,
-  'Digit3': 63,
-  'KeyE': 64,
-  'KeyR': 65,
-  'Digit5': 66,
-  'KeyT': 67,
-  'Digit6': 68,
-  'KeyY': 69,
-  'Digit7': 70,
-  'KeyU': 71,
-  'KeyI': 72
+  'KeyZ': 48, 'KeyS':49, 'KeyX':50, 'KeyD':51, 'KeyC':52, 'KeyV':53, 'KeyG':54,
+  'KeyB':55, 'KeyH':56, 'KeyN':57, 'KeyJ':58, 'KeyM':59, 'Comma':60, 'KeyL':61,
+  'Period':62, 'Semicolon':63, 'Slash':64,
+  // upper row
+  'KeyQ':60, 'Digit2':61, 'KeyW':62, 'Digit3':63, 'KeyE':64, 'KeyR':65, 'Digit5':66,
+  'KeyT':67, 'Digit6':68, 'KeyY':69, 'Digit7':70, 'KeyU':71, 'KeyI':72
 };
 
 const pressedKeys = new Set();
-
-function handleKeyDown(ev){
+window.addEventListener('keydown', ev=>{
   if(ev.repeat) return;
   const code = ev.code;
   const base = keyMap[code];
   if(base !== undefined){
     ev.preventDefault();
-    // apply octave shift from select
+    pressedKeys.add(code);
     const octaveShift = parseInt(document.getElementById('octaveSelect').value || '0',10);
     const midi = base + octaveShift*12;
-    pressedKeys.add(code);
-    // resume audio context on user gesture
     ctx.resume();
     playMidi(midi, {velocity:0.95, sustain: document.getElementById('sustain').checked});
   }
-}
-function handleKeyUp(ev){
+});
+window.addEventListener('keyup', ev=>{
   const code = ev.code;
   const base = keyMap[code];
   if(base !== undefined){
     ev.preventDefault();
     pressedKeys.delete(code);
-    // release corresponding midi
     const octaveShift = parseInt(document.getElementById('octaveSelect').value || '0',10);
     const midi = base + octaveShift*12;
-    if(!document.getElementById('sustain').checked){
-      releaseMidi(midi);
-    }
+    if(!document.getElementById('sustain').checked) releaseMidi(midi);
   }
-}
-window.addEventListener('keydown', handleKeyDown);
-window.addEventListener('keyup', handleKeyUp);
+});
 
-// volume control
+// Volume control
 document.getElementById('volume').addEventListener('input', e=>{
   const val = parseFloat(e.target.value)/100;
-  // smooth change
+  masterGain.gain.cancelScheduledValues(ctx.currentTime);
   masterGain.gain.linearRampToValueAtTime(val, ctx.currentTime + 0.02);
 });
 
-// sustain checkbox: if turned off, release any notes that were waiting for release
+// Sustain toggle: when turned off, release all held notes
 document.getElementById('sustain').addEventListener('change', e=>{
   if(!e.target.checked){
-    // release all notes that are currently active
     for(const [m,entry] of activeNotes.entries()){
       if(!entry.released) releaseMidi(m);
     }
   }
 });
 
-// initialize: add labels on keys for clarity and set MIDI attributes correctly
-(function init(){
-  // ensure DOM key elements have correct order: some black keys may be appended after whites by earlier loop; we'll set dataset note names properly already set
-  // layout again
-  setTimeout(layoutKeys, 80);
-})();
+// Accessibility: focus into keyboard for keyboard users
+keyboardEl.addEventListener('focus', ()=> {
+  // hint could be added
+});
+
+// Initialize layout again after fonts/resize
+setTimeout(layoutKeys, 120);
 
 </script>
 </body>
